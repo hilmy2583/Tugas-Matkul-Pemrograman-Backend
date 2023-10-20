@@ -38,9 +38,7 @@ class AnimalController extends Controller
         echo "Menambahkan Data Animals Baru\n<br>";
         array_push($this->animals, $request->nama);
         echo "Menampilkan Seluruh Data Animals\n<br>";
-        foreach($this->animals as $animal){
-            echo "- $animal\n<br>";
-        }
+        $this->index();
     }
 
     /**
@@ -70,9 +68,7 @@ class AnimalController extends Controller
         echo "Mengupdate Data Animals id $id\n<br>";
         $this->animals[$id] = $request->nama;
         echo "Menampilkan Seluruh Data Animals\n<br>";
-        foreach($this->animals as $animal){
-            echo "- $animal\n<br>";
-        }
+        $this->index();
     }
 
     /**
@@ -84,8 +80,6 @@ class AnimalController extends Controller
         echo "Menghapus Data Animals id $id\n<br>";
         unset($this->animals[$id]);
         echo "Menampilkan Seluruh Data Animals\n<br>";
-        foreach($this->animals as $animal){
-            echo "- $animal\n<br>";
-        }
+        $this->index();
     }
 }
