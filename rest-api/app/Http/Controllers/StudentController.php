@@ -76,6 +76,23 @@ class StudentController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $input = [
+            'nama' => $request->nama,
+            'nim' => $request->nim,
+            'email' => $request->email,
+            'jurusan' => $request->jurusan
+        ];
+
+        $students = Student::find($id);
+
+        $students->update($input);
+
+        $data = [
+            'message' => 'Student Is Succesfully To Update',
+            'data' => $students
+        ];
+
+        return response()->json($data, 200);
     }
 
     /**
@@ -84,5 +101,15 @@ class StudentController extends Controller
     public function destroy(string $id)
     {
         //
+        $students = Student::find($id);
+
+        $students->delete();
+
+        $data = [
+            'message' => 'Student Is Succesfully To Delete',
+            'data' => $students
+        ];
+
+        return response()->json($data, 204);
     }
 }
