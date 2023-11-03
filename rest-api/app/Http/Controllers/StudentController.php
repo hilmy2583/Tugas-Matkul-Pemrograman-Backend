@@ -15,6 +15,9 @@ class StudentController extends Controller
         //
         $students = Student::all();
 
+        if($students->isEmpty()){
+            return response()->json(204);
+        }
         $data = [
             'message' => 'Get All Students',
             'data' => $students
@@ -37,6 +40,13 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'nama' => 'required',
+            'nim' => 'required',
+            'email' => 'required|email',
+            'jurusan' => 'required'
+        ]);
+
         $input = [
             'nama' => $request->nama,
             'nim' => $request->nim,
@@ -60,6 +70,23 @@ class StudentController extends Controller
     public function show(string $id)
     {
         //
+        $students = Student::find($id);
+
+        if($students) {
+            $data = [
+                'message' => 'Get Detail Student',
+                'data' => $students
+            ];
+
+            return response()->json($data, 200);
+        }
+        else {
+            $data = [
+                'message' => 'Student Not Found'
+            ];
+
+            return response()->json($data, 404);
+        }
     }
 
     /**
@@ -76,23 +103,57 @@ class StudentController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $input = [
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan
-        ];
-
         $students = Student::find($id);
 
-        $students->update($input);
+        if($students) {
+            $input = [
+                'nama' => $request->nama ?? $students->nama,
+                'nim' => $request->nim ?? $students->nim,
+                'email' => $request->email ?? $students->email,
+                'jurusan' => $request->jurusan ?? $students->jurusan
+            ];
 
-        $data = [
-            'message' => 'Student Is Succesfully To Update',
-            'data' => $students
-        ];
+            $students->update($input);
 
-        return response()->json($data, 200);
+            $data = [
+                'message' => 'Student Is Succesfully To Update',
+                'data' => $students
+            ];
+
+            return response()->json($data, 200);
+        }
+        else {
+            $data = [
+                'message' => 'Student Not Found'
+            ];
+
+            return response()->json($data, 404);
+        }
+
+        //Alternatif lain, bisa digunakan juga pada show dan destroy
+        // if(! $students) {
+        //     $data = [
+        //         'message' => 'Student Not Found'
+        //     ];
+
+        //     return response()->json($data, 404);
+        // }
+
+        // $input = [
+        //     'nama' => $request->nama ?? $students->nama,
+        //     'nim' => $request->nim ?? $students->nim,
+        //     'email' => $request->email ?? $students->email,
+        //     'jurusan' => $request->jurusan ?? $students->jurusan
+        // ];
+
+        // $students->update($input);
+
+        // $data = [
+        //     'message' => 'Student Is Succesfully To Update',
+        //     'data' => $students
+        // ];
+
+        // return response()->json($data, 200);
     }
 
     /**
@@ -103,13 +164,22 @@ class StudentController extends Controller
         //
         $students = Student::find($id);
 
-        $students->delete();
+        if($students) {
+            $students->delete();
 
-        $data = [
-            'message' => 'Student Is Succesfully To Delete',
-            'data' => $students
-        ];
+            $data = [
+                'message' => 'Student Is Succesfully To Delete',
+                'data' => $students
+            ];
 
-        return response()->json($data, 204);
+            return response()->json($data, 200);
+        }
+        else {
+            $data = [
+                'message' => 'Student Not Found'
+            ];
+
+            return response()->json($data, 404);
+        }
     }
 }
