@@ -16,7 +16,10 @@ class StudentController extends Controller
         $students = Student::all();
 
         if($students->isEmpty()){
-            return response()->json(204);
+            $data = [
+                'message' => 'Data Kosong'
+            ];
+            return response()->json($data, 204);
         }
         $data = [
             'message' => 'Get All Students',
