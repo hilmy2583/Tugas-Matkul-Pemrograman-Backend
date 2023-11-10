@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $input = [
-            'nama' => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ];
@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         // if(Auth::attempt($input)){
 
-        //     $token = Auth::user()->createToken('auth_token');
+        //     $token = $user()->createToken('auth_token');
 
         //     $data = [
         //         'message' => 'Login Succesfully',
