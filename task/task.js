@@ -7,8 +7,12 @@
 //   console.log("Hasil Download: " + result);
 // }
 const showDownload = (result) => {
-    console.log("Download selesai");
-    console.log("Hasil Download: " + result);
+    return new Promise((resolve, reject) => {
+        console.log("Download selesai");
+        setTimeout(() => {
+            console.log("Hasil Download: " + result);
+        }, 1000);
+    });
 }
 
 /**
