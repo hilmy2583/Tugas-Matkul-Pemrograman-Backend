@@ -30,7 +30,7 @@ class Student {
     data.created_at = new Date();
     data.updated_at = new Date();
     return new Promise((resolve, reject) => {
-      const sql = "INSER INTO students SET ?";
+      const sql = "INSERT INTO students SET ?";
       db.query(sql, data, (err, results) => {
         if (err) {
           reject(err);

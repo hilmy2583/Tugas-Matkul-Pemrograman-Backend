@@ -1,2 +1,5 @@
 /try/node_modules
 /task/node_modules
+
+/try/.env
+/task/.nnv
