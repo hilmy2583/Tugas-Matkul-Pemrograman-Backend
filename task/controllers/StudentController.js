@@ -9,12 +9,20 @@ class StudentController {
         // memanggil method static all dengan async await.
         const students = await Student.all();
 
-        const data = {
-            message: "Menampilkkan semua students",
-            data: students,
-        };
-
-        res.json(data);
+        if(students.length > 0){
+            const data = {
+                message: "Menampilkkan semua students",
+                data: students,
+            };
+            return res.status(200).json(data);
+        }
+        else {
+            const data = {
+                message: "Students is empty",
+            };
+        
+            return res.status(200).json(data);
+        }
     }
 
     async store(req, res) {
@@ -24,47 +32,87 @@ class StudentController {
          * Mengembalikan response dalam bentuk json.
          */
         // code here
-        const validateData = {
-            nama: req.body.nama,
-            nim: req.body.nim,
-            email: req.body.email,
-            jurusan: req.body.jurusan,
+        const { nama, nim, email, jurusan } = req.body;
+
+        if(!nama || !nim || !email || !jurusan){
+            const data = {
+                message: "Semua data harus dikirim",
+            };
+    
+            return res.status(422).json(data);
         }
-        const students = await Student.create(validateData);
+
+        const student = await Student.create(req.body);
 
         const data = {
             message: "Menambahkan data student",
-            data: validateData,
+            data: student,
         };
 
-        res.json(data);
+        return res.status(201).json(data);
     }
 
-    update(req, res) {
+    async update(req, res) {
         // TODO 6: Update data students
         // code here
         const { id } = req.params;
-        const { nama } = req.body;
-        student[id] = nama;
+        const student = await Student.find(id);
 
-        const data = {
-            message: `Mengedit student id ${id}, nama ${nama}`,
-            data: student,
+        if(student.length > 0){
+            const student =  await Student.update(id, req.body);
+            const data = {
+                message: "Mengedit data student",
+                data: student,
+            }
+            res.status(200).json(data);
         }
-        res.json(data);
+        else{
+            const data = {
+                message: "Student not found",
+            }
+            res.status(404).json(data);
+        }
+        
     }
 
-    destroy(req, res) {
+    async destroy(req, res) {
         // TODO 7: Hapus data students
         // code here
         const { id } = req.params;
-        student.splice(id, 1);
+        const student = await Student.find(id);
 
-        const data = {
-            message: `Menghapus student id ${id}`,
-            data: student,
+        if(student.length > 0){
+            await Student.delete(id);
+            const data = {
+                message: "Menghapus data students"
+            }
+            res.status(200).json(data);
         }
-        res.json(data);
+        else{
+            const data = {
+                message: "Student not found",
+            }
+            res.status(404).json(data);
+        }
+    }
+
+    async show(req, res) {
+        const { id } = req.params;
+        const student = await Student.find(id);
+
+        if(student.length > 0){
+            const data = {
+                message: `Menampilkan Detail Student id ${id}`,
+                data: student,
+            }
+            res.status(200).json(data);
+        }
+        else{
+            const data = {
+                message: "Student not found",
+            }
+            res.status(404).json(data);
+        }
     }
 }
 
